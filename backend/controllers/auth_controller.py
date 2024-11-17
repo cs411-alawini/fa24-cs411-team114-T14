@@ -18,7 +18,6 @@ def register():
     email = data.get("email")
     primary_citizenship_id = data.get("primaryCitizenship")
     if not username or not password or not email or primary_citizenship_id is None:
-        print(username, password, email, primary_citizenship_id)
         return {"message": "Invalid input"}, 400
     password_hash = bcrypt.generate_password_hash(password.encode("utf-8")).decode(
         "utf-8"

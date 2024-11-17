@@ -52,7 +52,7 @@ function RegisterForm(): JSX.Element {
           }
         });
       } catch (err) {
-        console.log("Error in register request");
+        setIsRegisterSuccess(false);
       }
     }
   };
