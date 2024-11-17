@@ -35,8 +35,8 @@ CREATE TABLE IF NOT EXISTS Climate(
 CREATE TABLE IF NOT EXISTS Energy(
     CountryID INT,
     EnergyType VARCHAR(50),
-    EnergyConsumption DECIMAL,
-    EnergyProduction DECIMAL,
+    EnergyConsumption DECIMAL(20, 10),
+    EnergyProduction DECIMAL(20, 10),
     PRIMARY KEY(CountryID, EnergyType),
     FOREIGN KEY(CountryID) REFERENCES Country(CountryID) 
         ON UPDATE CASCADE 
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS Energy(
 -- @block
 CREATE TABLE IF NOT EXISTS Economy(
     CountryID INT PRIMARY KEY,
-    GDP DECIMAL,
+    GDP DECIMAL(20, 0),
     CPI DECIMAL,
     CPIChangePercent DECIMAL,
     CurrencyCode VARCHAR(10),
