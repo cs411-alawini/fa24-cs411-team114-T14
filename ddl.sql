@@ -63,9 +63,9 @@ CREATE TABLE IF NOT EXISTS Economy(
 );
 -- @block
 CREATE TABLE IF NOT EXISTS UserInfo(
-    UserID INT PRIMARY KEY,
-    Username VARCHAR(50),
-    Password VARCHAR(50),
+    UserID INT PRIMARY KEY AUTO_INCREMENT,
+    Username VARCHAR(50) UNIQUE,
+    Password VARCHAR(200),
     Email VARCHAR(100),
     PrimaryCitizenshipID INT,
     FOREIGN KEY(PrimaryCitizenshipID) REFERENCES Country(CountryID)
