@@ -64,13 +64,13 @@ def login():
     ).fetchone()
     if not user or not bcrypt.check_password_hash(user.Password, password):
         return {"message": "Invalid username or password"}, 401
-    access_token = create_access_token(identity=user.UserID)
     country = db.session.execute(
         text("SELECT * FROM Country WHERE CountryID = :countryID LIMIT 1"),
         {"countryID": user.PrimaryCitizenshipID},
     ).fetchone()
     if not country:
         return {"message": "Invalid country of citizenship"}, 400
+    access_token = create_access_token(identity=str(user.UserID))
     return (
         jsonify(
             {
@@ -78,7 +78,7 @@ def login():
                 "username": user.Username,
                 "email": user.Email,
                 "primaryCitizenshipID": country.CountryID,
-                "access_token": access_token,
+                "token": access_token,
             }
         ),
         200,
