@@ -13,7 +13,7 @@ function Feedback() {
 
   return (
     <>
-      <AddUserInputForm />
+      <AddUserInputForm isEdit={false} />
       <UserInputList />
     </>
   );

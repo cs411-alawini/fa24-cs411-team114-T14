@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { selectCitizenships } from "../../../services/country/CountrySelectors";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Alert, Button, Col, Form, Row } from "react-bootstrap";
+import { Alert, Button, ButtonGroup, Col, Form, Row } from "react-bootstrap";
 import {
   selectUserInputsError,
   selectUserInputsIsLoading,
@@ -12,10 +12,15 @@ import { useEffect, useState } from "react";
 import AddUserInput from "../../../types/userinput/AddUserInput";
 import {
   fetchUserInputs,
+  putUserInput,
   postUserInput,
 } from "../../../services/userinput/UserInputSlice";
+import UserInput from "../../../types/userinput/UserInput";
+import EditUserInput from "../../../types/userinput/EditUserInput";
+import { useNavigate } from "react-router";
+import { dashboardFeedback } from "../../../routes";
 
-const AddUserInputFormSchema = z
+const UserInputFormSchema = z
   .object({
     country: z.string().min(1, "Country is required"),
     dateVisitedFrom: z.string().date("Date visited from is required"),
@@ -74,9 +79,20 @@ const AddUserInputFormSchema = z
       path: ["dateVisitedTo"],
     }
   );
-type AddUserInputFormSchemaType = z.infer<typeof AddUserInputFormSchema>;
+type UserInputFormSchemaType = z.infer<typeof UserInputFormSchema>;
+type AddUserInputFormProps = {
+  isEdit: false;
+  defaultValues?: never;
+};
+type EditUserInputFormProps = {
+  isEdit: true;
+  defaultValues: UserInput;
+};
 
-function AddUserInputForm(): JSX.Element {
+function AddUserInputForm({
+  isEdit,
+  defaultValues,
+}: AddUserInputFormProps | EditUserInputFormProps): JSX.Element {
   const [isAddUserInputSuccess, setIsAddUserInputSuccess] =
     useState<boolean>(false);
   const {
@@ -84,45 +100,14 @@ function AddUserInputForm(): JSX.Element {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<AddUserInputFormSchemaType>({
-    resolver: zodResolver(AddUserInputFormSchema),
+  } = useForm<UserInputFormSchemaType>({
+    defaultValues,
+    resolver: zodResolver(UserInputFormSchema),
   });
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectUserInputsIsLoading);
   const error = useAppSelector(selectUserInputsError);
   const citizenshipMap = useAppSelector(selectCitizenships);
-  const onSubmit = async (data: AddUserInputFormSchemaType) => {
-    const addUserInput: AddUserInput = {
-      country: data.country,
-      dateVisitedFrom: data.dateVisitedFrom,
-      dateVisitedTo: data.dateVisitedTo,
-      foodRating: data.foodRating,
-      hospitalRating: data.hospitalRating,
-      climateRating: data.climateRating,
-      tourismRating: data.tourismRating,
-      safetyRating: data.safetyRating,
-      costOfLivingRating: data.costOfLivingRating,
-      cultureEntertainmentRating: data.cultureEntertainmentRating,
-      infrastructureRating: data.infrastructureRating,
-      healthcareRating: data.healthcareRating,
-      comments: data.comments,
-    };
-    if (!isLoading) {
-      try {
-        await dispatch(postUserInput(addUserInput)).then((resultAction) => {
-          if (postUserInput.fulfilled.match(resultAction)) {
-            reset();
-            setIsAddUserInputSuccess(true);
-            dispatch(fetchUserInputs());
-          } else {
-            setIsAddUserInputSuccess(false);
-          }
-        });
-      } catch (err) {
-        setIsAddUserInputSuccess(false);
-      }
-    }
-  };
   useEffect(() => {
     if (isAddUserInputSuccess) {
       const timer = setTimeout(() => {
@@ -131,10 +116,87 @@ function AddUserInputForm(): JSX.Element {
       return () => clearTimeout(timer);
     }
   }, [isAddUserInputSuccess]);
+  const navigate = useNavigate();
+  if (citizenshipMap === null) {
+    return <></>;
+  }
+  const onSubmit = async (data: UserInputFormSchemaType) => {
+    if (!isEdit) {
+      const addUserInput: AddUserInput = {
+        country: citizenshipMap[data.country],
+        dateVisitedFrom: data.dateVisitedFrom,
+        dateVisitedTo: data.dateVisitedTo,
+        foodRating: data.foodRating,
+        hospitalRating: data.hospitalRating,
+        climateRating: data.climateRating,
+        tourismRating: data.tourismRating,
+        safetyRating: data.safetyRating,
+        costOfLivingRating: data.costOfLivingRating,
+        cultureEntertainmentRating: data.cultureEntertainmentRating,
+        infrastructureRating: data.infrastructureRating,
+        healthcareRating: data.healthcareRating,
+        comments: data.comments,
+      };
+      if (!isLoading) {
+        try {
+          await dispatch(postUserInput(addUserInput)).then((resultAction) => {
+            if (postUserInput.fulfilled.match(resultAction)) {
+              reset();
+              setIsAddUserInputSuccess(true);
+              dispatch(fetchUserInputs());
+            } else {
+              setIsAddUserInputSuccess(false);
+            }
+          });
+        } catch (err) {
+          setIsAddUserInputSuccess(false);
+        }
+      }
+    } else {
+      const editUserInput: EditUserInput = {
+        userInputID: defaultValues.userInputID,
+        country: citizenshipMap[data.country],
+        dateVisitedFrom: data.dateVisitedFrom,
+        dateVisitedTo: data.dateVisitedTo,
+        foodRating: data.foodRating,
+        hospitalRating: data.hospitalRating,
+        climateRating: data.climateRating,
+        tourismRating: data.tourismRating,
+        safetyRating: data.safetyRating,
+        costOfLivingRating: data.costOfLivingRating,
+        cultureEntertainmentRating: data.cultureEntertainmentRating,
+        infrastructureRating: data.infrastructureRating,
+        healthcareRating: data.healthcareRating,
+        comments: data.comments,
+      };
+      if (!isLoading) {
+        try {
+          await dispatch(putUserInput(editUserInput)).then((resultAction) => {
+            if (putUserInput.fulfilled.match(resultAction)) {
+              reset();
+              setIsAddUserInputSuccess(true);
+              dispatch(fetchUserInputs());
+              navigate(dashboardFeedback);
+            } else {
+              setIsAddUserInputSuccess(false);
+            }
+          });
+        } catch (err) {
+          setIsAddUserInputSuccess(false);
+        }
+      }
+    }
+  };
+  const onCancel = () => {
+    reset();
+    if (isEdit) {
+      navigate(dashboardFeedback);
+    }
+  };
 
   return (
     <Form className="container mt-3 mb-3" onSubmit={handleSubmit(onSubmit)}>
-      <h2 className="h2">Add Feedback</h2>
+      <h2 className="h2">{isEdit ? "Edit Feedback" : "Add Feedback"}</h2>{" "}
       <Form.Group className="mb-3" controlId="country">
         <Form.Label>Country</Form.Label>
         <Form.Select
@@ -144,7 +206,7 @@ function AddUserInputForm(): JSX.Element {
           <option value="">Select a country</option>
           {citizenshipMap &&
             Object.entries(citizenshipMap).map(([country, id]) => (
-              <option key={id} value={id}>
+              <option key={id} value={country}>
                 {country}
               </option>
             ))}
@@ -297,9 +359,21 @@ function AddUserInputForm(): JSX.Element {
           {errors.comments?.message}
         </Form.Control.Feedback>
       </Form.Group>
-      <Button className="w-100" type="submit">
-        Submit
-      </Button>
+      <div className="d-flex justify-content-end">
+        <ButtonGroup>
+          <Button className="w-100" type="submit">
+            Submit
+          </Button>
+          <Button
+            className="w-100"
+            type="reset"
+            variant="danger"
+            onClick={onCancel}
+          >
+            Cancel
+          </Button>
+        </ButtonGroup>
+      </div>
       {error && (
         <Alert className="mt-3 mb-3" variant="danger">
           {error}

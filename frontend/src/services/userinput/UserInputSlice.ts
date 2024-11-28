@@ -3,10 +3,12 @@ import UserInput from "../../types/userinput/UserInput";
 import {
   addUserInputRequest,
   deleteUserInputRequest,
+  editUserInputRequest as putUserInputRequest,
   getUserInputsRequest,
 } from "./UserInputRequests";
 import { RootState } from "../../app/store";
 import AddUserInput from "../../types/userinput/AddUserInput";
+import EditUserInput from "../../types/userinput/EditUserInput";
 
 interface UserInputState {
   userInputs: UserInput[];
@@ -51,6 +53,24 @@ const postUserInput = createAsyncThunk<
       return Promise.reject("User not logged in");
     }
     return await addUserInputRequest(userInfo.token, addUserInput);
+  }
+);
+
+const putUserInput = createAsyncThunk<
+  string,
+  EditUserInput,
+  { state: RootState }
+>(
+  "userinput/editUserInput",
+  async function edit(
+    editUserInput: EditUserInput,
+    { getState }
+  ): Promise<string> {
+    const userInfo = getState().auth.userInfo;
+    if (userInfo === null) {
+      return Promise.reject("User not logged in");
+    }
+    return await putUserInputRequest(userInfo.token, editUserInput);
   }
 );
 
@@ -100,6 +120,19 @@ const userInputSlice = createSlice({
         state.error = action.error.message!;
       });
     builder
+      .addCase(putUserInput.pending, (state) => {
+        state.isLoading = true;
+        state.error = "";
+      })
+      .addCase(putUserInput.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = "";
+      })
+      .addCase(putUserInput.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message!;
+      });
+    builder
       .addCase(deleteUserInput.pending, (state) => {
         state.isLoading = true;
         state.error = "";
@@ -116,5 +149,5 @@ const userInputSlice = createSlice({
 });
 
 const userInputReducer = userInputSlice.reducer;
-export { fetchUserInputs, postUserInput, deleteUserInput };
+export { fetchUserInputs, postUserInput, putUserInput, deleteUserInput };
 export default userInputReducer;

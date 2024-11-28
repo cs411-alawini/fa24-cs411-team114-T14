@@ -5,10 +5,12 @@ import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import MainNavbar from "./pages/components/MainNavbar";
 import Feedback from "./pages/Feedback/Feedback";
+import EditUserInputForm from "./pages/Feedback/components/EditUserInputForm";
 
 const login = "/login";
 const dashboard = "/dashboard";
 const dashboardFeedback = "/dashboard/feedback";
+const dashboardFeedbackEdit = "/dashboard/feedback/edit";
 const dashboardHome = "/dashboard/home";
 const all = "*";
 
@@ -46,6 +48,10 @@ function AppRouter() {
         >
           <Route path={dashboardHome} element={<Dashboard />} />
           <Route path={dashboardFeedback} element={<Feedback />} />
+          <Route
+            path={`${dashboardFeedbackEdit}/:id`}
+            element={<EditUserInputForm />}
+          />
         </Route>
         <Route path={all} element={<Navigate to={login} />} />
       </Routes>
@@ -53,4 +59,12 @@ function AppRouter() {
   );
 }
 
+export {
+  login,
+  dashboard,
+  dashboardFeedback,
+  dashboardFeedbackEdit,
+  dashboardHome,
+  all,
+};
 export default AppRouter;

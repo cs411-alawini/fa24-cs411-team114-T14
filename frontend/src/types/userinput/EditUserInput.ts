@@ -1,4 +1,5 @@
-interface AddUserInput {
+interface EditUserInput {
+  userInputID: number;
   country: number;
   dateVisitedFrom: string;
   dateVisitedTo: string;
@@ -14,4 +15,4 @@ interface AddUserInput {
   comments?: string;
 }
 
-export default AddUserInput;
+export default EditUserInput;
