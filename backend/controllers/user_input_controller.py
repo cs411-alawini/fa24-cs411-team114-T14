@@ -69,9 +69,9 @@ def post_user_input():
     healthcare_rating = data.get("healthcareRating")
     comments = data.get("comments")
     if (
-        not country_id
-        or not date_visited_from
-        or not date_visited_to
+        country_id is None
+        or date_visited_from is None
+        or date_visited_to is None
         or food_rating is None
         or hospital_rating is None
         or climate_rating is None
@@ -153,9 +153,9 @@ def put_user_input(user_input_id: str):
     healthcare_rating = data.get("healthcareRating")
     comments = data.get("comments")
     if (
-        not country_id
-        or not date_visited_from
-        or not date_visited_to
+        country_id is None
+        or date_visited_from is None
+        or date_visited_to is None
         or food_rating is None
         or hospital_rating is None
         or climate_rating is None
