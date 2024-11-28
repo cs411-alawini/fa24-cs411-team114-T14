@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
 from sqlalchemy.exc import IntegrityError
-from data_models.UserInfo import UserInfo
 from extensions import bcrypt, db
 from sqlalchemy import text
 
@@ -23,12 +22,6 @@ def register():
         "utf-8"
     )
     try:
-        user = UserInfo()
-        user.Username = username
-        user.Password = password_hash
-        user.Email = email
-        user.PrimaryCitizenshipID = primary_citizenship_id
-
         db.session.execute(
             text(
                 "INSERT INTO UserInfo (Username, Password, Email, PrimaryCitizenshipID) VALUES (:username, :password, :email, :primaryCitizenshipID)"
