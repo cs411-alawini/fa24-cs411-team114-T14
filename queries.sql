@@ -75,6 +75,18 @@ WHERE cl.CO2Emissions > (
     )
 ORDER BY cl.CO2Emissions DESC
 LIMIT 15;
+SELECT Country.CountryID
+FROM Country
+    JOIN Climate ON Country.CountryID = Climate.CountryID
+WHERE Climate.CO2Emissions > (
+        SELECT AVG(CO2Emissions)
+        FROM Climate c
+    )
+    AND Climate.ForestedAreaPercent > (
+        SELECT AVG(ForestedAreaPercent)
+        FROM Climate c
+    )
+ORDER BY Climate.CO2Emissions DESC;
 -- @block
 CREATE INDEX IF NOT EXISTS CO2EmissionsIndex ON Climate(CO2Emissions);
 CREATE INDEX IF NOT EXISTS ForestedAreaPercentIndex ON Climate(ForestedAreaPercent);
