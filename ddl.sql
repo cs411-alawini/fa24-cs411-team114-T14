@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS UserInfo(
 );
 -- @block
 CREATE TABLE IF NOT EXISTS UserInput(
-    UserInputID INT PRIMARY KEY,
+    UserInputID INT PRIMARY KEY AUTO_INCREMENT,
     UserID INT,
     CountryID INT,
     DateVisitedFrom DATE,
