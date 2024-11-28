@@ -4,11 +4,24 @@ import { selectAuthUser } from "./services/auth/AuthSelectors";
 import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import MainNavbar from "./pages/components/MainNavbar";
+import Feedback from "./pages/Feedback/Feedback";
 
 const login = "/login";
 const dashboard = "/dashboard";
+const dashboardFeedback = "/dashboard/feedback";
 const dashboardHome = "/dashboard/home";
 const all = "*";
+
+const links = [
+  {
+    name: "Feedback",
+    path: dashboardFeedback,
+  },
+  {
+    name: "Dashboard",
+    path: dashboardHome,
+  },
+];
 
 function AppRouter() {
   const user = useAppSelector(selectAuthUser);
@@ -19,15 +32,20 @@ function AppRouter() {
       <Routes>
         <Route
           path={login}
-          element={!loggedIn ? <Login /> : <Navigate to={dashboardHome} />}
+          element={!loggedIn ? <Login /> : <Navigate to={dashboardFeedback} />}
         />
         <Route
           path={dashboard}
           element={
-            user !== null ? <MainNavbar user={user} /> : <Navigate to={login} />
+            user !== null ? (
+              <MainNavbar user={user} links={links} />
+            ) : (
+              <Navigate to={login} />
+            )
           }
         >
           <Route path={dashboardHome} element={<Dashboard />} />
+          <Route path={dashboardFeedback} element={<Feedback />} />
         </Route>
         <Route path={all} element={<Navigate to={login} />} />
       </Routes>

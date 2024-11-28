@@ -27,9 +27,7 @@ CREATE TABLE IF NOT EXISTS Climate(
     AgriculturalLandPercent DECIMAL,
     ForestedAreaPercent DECIMAL,
     CO2Emissions DECIMAL,
-    FOREIGN KEY(CountryID) REFERENCES Country(CountryID) 
-        ON UPDATE CASCADE 
-        ON DELETE CASCADE
+    FOREIGN KEY(CountryID) REFERENCES Country(CountryID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 -- @block
 CREATE TABLE IF NOT EXISTS Energy(
@@ -38,9 +36,7 @@ CREATE TABLE IF NOT EXISTS Energy(
     EnergyConsumption DECIMAL(20, 10),
     EnergyProduction DECIMAL(20, 10),
     PRIMARY KEY(CountryID, EnergyType),
-    FOREIGN KEY(CountryID) REFERENCES Country(CountryID) 
-        ON UPDATE CASCADE 
-        ON DELETE CASCADE
+    FOREIGN KEY(CountryID) REFERENCES Country(CountryID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 -- @block
 CREATE TABLE IF NOT EXISTS Economy(
@@ -57,24 +53,20 @@ CREATE TABLE IF NOT EXISTS Economy(
     OutOfPocketHealthExpenditurePercent DECIMAL,
     GrossPrimaryEducationEnrollmentPercent DECIMAL,
     GrossTertiaryEducationEnrollmentPercent DECIMAL,
-    FOREIGN KEY(CountryID) REFERENCES Country(CountryID) 
-        ON UPDATE CASCADE 
-        ON DELETE CASCADE
+    FOREIGN KEY(CountryID) REFERENCES Country(CountryID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 -- @block
 CREATE TABLE IF NOT EXISTS UserInfo(
     UserID INT PRIMARY KEY AUTO_INCREMENT,
     Username VARCHAR(50) UNIQUE,
-    Password VARCHAR(200),
+    `Password` VARCHAR(200),
     Email VARCHAR(100),
     PrimaryCitizenshipID INT,
-    FOREIGN KEY(PrimaryCitizenshipID) REFERENCES Country(CountryID)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
+    FOREIGN KEY(PrimaryCitizenshipID) REFERENCES Country(CountryID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 -- @block
 CREATE TABLE IF NOT EXISTS UserInput(
-    UserInputID INT PRIMARY KEY,
+    UserInputID INT PRIMARY KEY AUTO_INCREMENT,
     UserID INT,
     CountryID INT,
     DateVisitedFrom DATE,
@@ -89,10 +81,6 @@ CREATE TABLE IF NOT EXISTS UserInput(
     InfrastructureRating INT,
     HealthcareRating INT,
     Comments TEXT,
-    FOREIGN KEY(UserID) REFERENCES UserInfo(UserID)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    FOREIGN KEY(CountryID) REFERENCES Country(CountryID)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
+    FOREIGN KEY(UserID) REFERENCES UserInfo(UserID) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(CountryID) REFERENCES Country(CountryID) ON UPDATE CASCADE ON DELETE CASCADE
 );
