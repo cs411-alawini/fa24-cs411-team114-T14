@@ -7,6 +7,7 @@ from google.cloud.sql.connector import Connector
 from example.example_controller import example_blueprint
 from controllers.auth_controller import auth_blueprint
 from controllers.country_controller import country_blueprint
+from controllers.user_input_controller import user_input_blueprint
 
 USER = "secondary"
 PASSWORD = os.environ.get("DB_PASSWORD")
@@ -42,5 +43,6 @@ def create_app():
     app.register_blueprint(example_blueprint)
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(country_blueprint)
+    app.register_blueprint(user_input_blueprint)
     db.init_app(app)
     return app
