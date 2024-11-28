@@ -37,6 +37,7 @@ def create_app():
     }
     app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
+    app.config["FLASK_DEBUG"] = os.environ.get("FLASK_DEBUG")
     JWTManager(app)
     app.register_blueprint(example_blueprint)
     app.register_blueprint(auth_blueprint)
