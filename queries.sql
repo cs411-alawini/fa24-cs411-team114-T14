@@ -10,7 +10,8 @@ FROM Energy;
 SELECT *
 FROM UserInfo;
 SELECT *
-FROM userinput;
+FROM UserInput
+LIMIT 500;
 -- @block
 SELECT Country.Name,
     AVG(ClimateRating) AS AvgClimateRating
@@ -22,9 +23,9 @@ GROUP BY Country.Name
 ORDER BY AvgClimateRating DESC
 LIMIT 15;
 -- @block
-CREATE INDEX IF NOT EXISTS DateVisitedFromIndex ON UserInput(DateVisitedFrom);
-CREATE INDEX IF NOT EXISTS DateVisitedToIndex ON UserInput(DateVisitedTo);
-CREATE INDEX IF NOT EXISTS CountryNameIndex ON Country(Name);
+CREATE INDEX DateVisitedFromIndex ON UserInput(DateVisitedFrom);
+CREATE INDEX DateVisitedToIndex ON UserInput(DateVisitedTo);
+CREATE INDEX CountryNameIndex ON Country(Name);
 -- @block
 SELECT Country.Name,
     SUM(EnergyConsumption) - SUM(EnergyProduction) AS EnergyDeficit
@@ -34,10 +35,9 @@ GROUP BY Country.Name
 ORDER BY EnergyDeficit DESC
 LIMIT 15;
 -- @block
-CREATE INDEX IF NOT EXISTS CountryNameIndex ON Country(Name);
-CREATE INDEX IF NOT EXISTS EnergyNameIndex ON Energy(CountryID);
-CREATE INDEX IF NOT EXISTS EnergyConsumptionIndex ON Energy(EnergyConsumption);
-CREATE INDEX IF NOT EXISTS EnergyProductionIndex ON Energy(EnergyProduction);
+CREATE INDEX EnergyNameIndex ON Energy(CountryID);
+CREATE INDEX EnergyConsumptionIndex ON Energy(EnergyConsumption);
+CREATE INDEX EnergyProductionIndex ON Energy(EnergyProduction);
 -- @block
 SELECT UserInfo.Username,
     Country.Name
@@ -54,8 +54,8 @@ FROM (
 ORDER BY UserInfo.Username
 LIMIT 15;
 -- @block
-CREATE INDEX IF NOT EXISTS ClimateRatingIndex ON UserInput(ClimateRating);
-CREATE INDEX IF NOT EXISTS UserIDIndex ON UserInput(UserID);
+CREATE INDEX ClimateRatingIndex ON UserInput(ClimateRating);
+CREATE INDEX UserIDIndex ON UserInput(UserID);
 -- @block
 SELECT c.CountryID,
     c.Name,
@@ -88,5 +88,5 @@ WHERE Climate.CO2Emissions > (
     )
 ORDER BY Climate.CO2Emissions DESC;
 -- @block
-CREATE INDEX IF NOT EXISTS CO2EmissionsIndex ON Climate(CO2Emissions);
-CREATE INDEX IF NOT EXISTS ForestedAreaPercentIndex ON Climate(ForestedAreaPercent);
+CREATE INDEX CO2EmissionsIndex ON Climate(CO2Emissions);
+CREATE INDEX ForestedAreaPercentIndex ON Climate(ForestedAreaPercent);
