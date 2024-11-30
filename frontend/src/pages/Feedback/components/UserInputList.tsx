@@ -1,14 +1,17 @@
-import { Alert, Button, Container, Table } from "react-bootstrap";
+import { Alert, Button, ButtonGroup, Container, Table } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { selectUserInputs } from "../../../services/userinput/UserInputSelectors";
 import {
   deleteUserInput,
   fetchUserInputs,
 } from "../../../services/userinput/UserInputSlice";
+import { useNavigate } from "react-router";
+import { dashboardFeedbackEdit } from "../../../routes";
 
 function UserInputList() {
   const userInputs = useAppSelector(selectUserInputs);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   if (userInputs.length === 0) {
     return (
@@ -57,18 +60,29 @@ function UserInputList() {
               <td>{userInput.healthcareRating}</td>
               <td>{userInput.comments}</td>
               <td>
-                <Button
-                  variant="danger"
-                  onClick={async () => {
-                    await dispatch(deleteUserInput(userInput.userInputID)).then(
-                      () => {
+                <ButtonGroup vertical>
+                  <Button
+                    variant="danger"
+                    onClick={async () => {
+                      await dispatch(
+                        deleteUserInput(userInput.userInputID)
+                      ).then(() => {
                         dispatch(fetchUserInputs());
-                      }
-                    );
-                  }}
-                >
-                  Delete
-                </Button>
+                      });
+                    }}
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      navigate(
+                        `${dashboardFeedbackEdit}/${userInput.userInputID}`
+                      );
+                    }}
+                  >
+                    Edit
+                  </Button>
+                </ButtonGroup>
               </td>
             </tr>
           ))}
