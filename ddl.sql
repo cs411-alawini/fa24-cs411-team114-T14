@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS UserInfo(
     Username VARCHAR(50) UNIQUE,
     `Password` VARCHAR(200),
     Email VARCHAR(100),
+    isFrequent BOOLEAN DEFAULT FALSE,
     PrimaryCitizenshipID INT,
     FOREIGN KEY(PrimaryCitizenshipID) REFERENCES Country(CountryID) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -71,16 +72,35 @@ CREATE TABLE IF NOT EXISTS UserInput(
     CountryID INT,
     DateVisitedFrom DATE,
     DateVisitedTo DATE,
-    FoodRating INT,
-    HospitalRating INT,
-    ClimateRating INT,
-    TourismRating INT,
-    SafetyRating INT,
-    CostOfLivingRating INT,
-    CultureEntertainmentRating INT,
-    InfrastructureRating INT,
-    HealthcareRating INT,
+    FoodRating INT CHECK(
+        FoodRating BETWEEN 1 AND 10
+    ),
+    HospitalRating INT CHECK(
+        HospitalRating BETWEEN 1 AND 10
+    ),
+    ClimateRating INT CHECK(
+        ClimateRating BETWEEN 1 AND 10
+    ),
+    TourismRating INT CHECK(
+        TourismRating BETWEEN 1 AND 10
+    ),
+    SafetyRating INT CHECK(
+        SafetyRating BETWEEN 1 AND 10
+    ),
+    CostOfLivingRating INT CHECK(
+        CostOfLivingRating BETWEEN 1 AND 10
+    ),
+    CultureEntertainmentRating INT CHECK(
+        CultureEntertainmentRating BETWEEN 1 AND 10
+    ),
+    InfrastructureRating INT CHECK(
+        InfrastructureRating BETWEEN 1 AND 10
+    ),
+    HealthcareRating INT CHECK(
+        HealthcareRating BETWEEN 1 AND 10
+    ),
     Comments TEXT,
+    CHECK(DateVisitedFrom < DateVisitedTo),
     FOREIGN KEY(UserID) REFERENCES UserInfo(UserID) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY(CountryID) REFERENCES Country(CountryID) ON UPDATE CASCADE ON DELETE CASCADE
 );
