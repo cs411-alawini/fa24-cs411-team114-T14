@@ -2,12 +2,14 @@ import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import authReducer from "../services/auth/AuthSlice";
 import countryReducer from "../services/country/CountrySlice";
 import userInputReducer from "../services/userinput/UserInputSlice";
+import rankingReducer from "../services/ranking/RankingSlice";
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     country: countryReducer,
     userinputs: userInputReducer,
+    ranking: rankingReducer,
   },
 });
 

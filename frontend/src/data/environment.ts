@@ -4,6 +4,7 @@ const apiEndpoints = {
   register: `${base_url}/register`,
   login: `${base_url}/login`,
   userInputs: `${base_url}/user_input`,
+  ranking: `${base_url}/ranking`,
 };
 
 export default apiEndpoints;

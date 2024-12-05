@@ -6,11 +6,13 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import MainNavbar from "./pages/components/MainNavbar";
 import Feedback from "./pages/Feedback/Feedback";
 import EditUserInputForm from "./pages/Feedback/components/EditUserInputForm";
+import Ranking from "./Ranking/Ranking";
 
 const login = "/login";
 const dashboard = "/dashboard";
 const dashboardFeedback = "/dashboard/feedback";
 const dashboardFeedbackEdit = "/dashboard/feedback/edit";
+const dashboardRankings = "/dashboard/rankings";
 const dashboardHome = "/dashboard/home";
 const all = "*";
 
@@ -22,6 +24,10 @@ const links = [
   {
     name: "Dashboard",
     path: dashboardHome,
+  },
+  {
+    name: "Rankings",
+    path: dashboardRankings,
   },
 ];
 
@@ -52,6 +58,7 @@ function AppRouter() {
             path={`${dashboardFeedbackEdit}/:id`}
             element={<EditUserInputForm />}
           />
+          <Route path={dashboardRankings} element={<Ranking />} />
         </Route>
         <Route path={all} element={<Navigate to={login} />} />
       </Routes>
