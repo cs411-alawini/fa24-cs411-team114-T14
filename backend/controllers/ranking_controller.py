@@ -18,8 +18,8 @@ class FavoriteClimateCountryCount(NamedTuple):
 
 
 @ranking_blueprint.route("/ranking", methods=["GET"])
-# @jwt_required()
-def get_energy_deficit_per_country():
+@jwt_required()
+def get_ranking():
     energy_deficits: Sequence[Row[EnergyDeficit]] = db.session.execute(
         text(
             """ SELECT Name AS country,
