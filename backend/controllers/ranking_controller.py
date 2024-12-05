@@ -1,5 +1,5 @@
 from typing import NamedTuple
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from sqlalchemy import Row, Sequence, text
 from extensions import db
@@ -83,4 +83,29 @@ def get_ranking():
             row[0] for row in countries_with_poor_co2_emissions_and_forested_area
         ],
     }
+    return jsonify(response_data), 200
+
+
+@ranking_blueprint.route("/average_climate_rating_of_country", methods=["GET"])
+@jwt_required()
+def get_average_climate_rating_of_country():
+    date_visited_from = request.args.get("date_visited_from")
+    date_visited_to = request.args.get("date_visited_to")
+    average_climate_rating_of_country = db.session.execute(
+        text(
+            """ SELECT Country.Name AS country,
+                    AVG(ClimateRating) AS average_climate_rating
+                FROM UserInput
+                    JOIN Country ON UserInput.CountryID = Country.CountryID
+                WHERE DateVisitedFrom > :date_visited_from
+                    AND DateVisitedTo < :date_visited_to
+                GROUP BY country
+                ORDER BY average_climate_rating DESC"""
+        ),
+        {"date_visited_from": date_visited_from, "date_visited_to": date_visited_to},
+    )
+    response_data = [
+        {"country": row.country, "averageClimateRating": row.average_climate_rating}
+        for row in average_climate_rating_of_country
+    ]
     return jsonify(response_data), 200
