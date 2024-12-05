@@ -11,7 +11,7 @@ interface RankingState {
   rankings: Ranking | null;
   isLoading: boolean;
   error: string;
-  averageClimateRatings: AverageClimateRating[];
+  averageClimateRatings: AverageClimateRating[] | null;
   isLoadingAverageClimateRatings: boolean;
   errorAverageClimateRatings: string;
 }
@@ -21,7 +21,7 @@ function getInitialRankingState(): RankingState {
     rankings: null,
     isLoading: false,
     error: "",
-    averageClimateRatings: [],
+    averageClimateRatings: null,
     isLoadingAverageClimateRatings: false,
     errorAverageClimateRatings: "",
   };

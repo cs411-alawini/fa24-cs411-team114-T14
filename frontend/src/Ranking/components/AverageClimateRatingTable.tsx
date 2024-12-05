@@ -5,9 +5,17 @@ import { selectAverageClimateRatings } from "../../services/ranking/RankingSelec
 function AverageClimateRatingTable() {
   const averageClimateRatings = useAppSelector(selectAverageClimateRatings);
 
-  if (averageClimateRatings.length === 0) {
+  if (averageClimateRatings === null) {
     return (
       <Alert variant="warning">Submit duration to get climate ratings</Alert>
+    );
+  }
+
+  if (averageClimateRatings.length === 0) {
+    return (
+      <Alert variant="warning">
+        Submitted duration does not contain any feedback, try another duration
+      </Alert>
     );
   }
 
