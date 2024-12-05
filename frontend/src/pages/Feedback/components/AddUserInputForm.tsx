@@ -386,7 +386,8 @@ function AddUserInputForm({
       )}
       {isAddUserInputSuccess && (
         <Alert className="mt-3 mb-3" variant="info">
-          Feedback added successfully!
+          Feedback added successfully! (Dates may have been changed to prevent
+          interval overlap)
         </Alert>
       )}
     </Form>
