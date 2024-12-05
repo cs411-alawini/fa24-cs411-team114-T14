@@ -136,8 +136,6 @@ def put_user_input(user_input_id: str):
     if not data:
         return {"message": "Invalid input"}, 400
     country_id = data.get("country")
-    date_visited_from = data.get("dateVisitedFrom")
-    date_visited_to = data.get("dateVisitedTo")
     food_rating = data.get("foodRating")
     hospital_rating = data.get("hospitalRating")
     climate_rating = data.get("climateRating")
@@ -150,8 +148,6 @@ def put_user_input(user_input_id: str):
     comments = data.get("comments")
     if (
         country_id is None
-        or date_visited_from is None
-        or date_visited_to is None
         or food_rating is None
         or hospital_rating is None
         or climate_rating is None
@@ -184,8 +180,7 @@ def put_user_input(user_input_id: str):
         db.session.execute(
             text(
                 """ UPDATE UserInput 
-                    SET CountryID = :country_id, DateVisitedFrom = :date_visited_from, 
-                        DateVisitedTo = :date_visited_to, FoodRating = :food_rating, 
+                    SET CountryID = :country_id, FoodRating = :food_rating, 
                         HospitalRating = :hospital_rating, ClimateRating = :climate_rating, 
                         TourismRating = :tourism_rating, SafetyRating = :safety_rating, 
                         CostOfLivingRating = :cost_of_living_rating, 
@@ -196,8 +191,6 @@ def put_user_input(user_input_id: str):
             ),
             {
                 "country_id": country_id,
-                "date_visited_from": date_visited_from,
-                "date_visited_to": date_visited_to,
                 "food_rating": food_rating,
                 "hospital_rating": hospital_rating,
                 "climate_rating": climate_rating,
