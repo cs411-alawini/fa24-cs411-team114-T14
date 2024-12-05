@@ -156,8 +156,6 @@ function AddUserInputForm({
       const editUserInput: EditUserInput = {
         userInputID: defaultValues.userInputID,
         country: citizenshipMap[data.country],
-        dateVisitedFrom: data.dateVisitedFrom,
-        dateVisitedTo: data.dateVisitedTo,
         foodRating: data.foodRating,
         hospitalRating: data.hospitalRating,
         climateRating: data.climateRating,
@@ -222,6 +220,7 @@ function AddUserInputForm({
             type="date"
             {...register("dateVisitedFrom")}
             isInvalid={errors.dateVisitedFrom !== undefined}
+            readOnly={isEdit}
           />
           <Form.Control.Feedback type="invalid">
             {errors.dateVisitedFrom?.message}
@@ -233,6 +232,7 @@ function AddUserInputForm({
             type="date"
             {...register("dateVisitedTo")}
             isInvalid={errors.dateVisitedTo !== undefined}
+            readOnly={isEdit}
           />
           <Form.Control.Feedback type="invalid">
             {errors.dateVisitedTo?.message}
@@ -386,7 +386,8 @@ function AddUserInputForm({
       )}
       {isAddUserInputSuccess && (
         <Alert className="mt-3 mb-3" variant="info">
-          Feedback added successfully!
+          Feedback added successfully! (Dates may have been changed to prevent
+          interval overlap)
         </Alert>
       )}
     </Form>
