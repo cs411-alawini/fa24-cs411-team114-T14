@@ -2,6 +2,7 @@ from sqlalchemy.exc import IntegrityError
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from sqlalchemy import text
+from data_models.InsertUserInputWithOverlapValidationResult import InsertUserInputWithOverlapValidationResult
 from extensions import db
 
 user_input_blueprint = Blueprint("user_input", __name__)
@@ -93,16 +94,10 @@ def post_user_input():
     ):
         return {"message": "Invalid input"}, 400
     try:
-        db.session.execute(
+        output = db.session.execute(
             text(
-                """ INSERT INTO UserInput 
-                        (UserID, CountryID, DateVisitedFrom, DateVisitedTo, 
-                        FoodRating, HospitalRating, ClimateRating, 
-                        TourismRating, SafetyRating, CostOfLivingRating, 
-                        CultureEntertainmentRating, InfrastructureRating, HealthcareRating, 
-                        Comments) 
-                    VALUES 
-                        (:user_id, :country_id, :date_visited_from, :date_visited_to, 
+                """ CALL InsertUserInputWithOverlapValidation(
+                        :user_id, :country_id, :date_visited_from, :date_visited_to, 
                         :food_rating, :hospital_rating, :climate_rating, 
                         :tourism_rating, :safety_rating, :cost_of_living_rating, 
                         :culture_entertainment_rating, :infrastructure_rating, :healthcare_rating, 
@@ -125,11 +120,12 @@ def post_user_input():
                 "comments": comments,
             },
         )
-        db.session.commit()
+        result = InsertUserInputWithOverlapValidationResult(*output.first())
+        if result.status_code != 0:
+            return {"message": result.message}, 400
+        return {"message": result.message}, 201
     except IntegrityError:
-        db.session.rollback()
         return {"message": "Invalid input"}, 400
-    return {"message": "User input created successfully"}, 201
 
 
 @user_input_blueprint.route("/user_input/<user_input_id>", methods=["PUT"])
