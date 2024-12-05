@@ -54,6 +54,21 @@ FROM (
 ORDER BY UserInfo.Username
 LIMIT 15;
 -- @block
+SELECT Name,
+    COUNT(*) AS COUNT
+FROM (
+        SELECT UserID,
+            MAX(ClimateRating) AS maxclimaterating
+        FROM UserInput
+        GROUP BY UserID
+    ) usermaxclimaterating
+    JOIN UserInput ON usermaxclimaterating.UserID = UserInput.UserID
+    AND usermaxclimaterating.maxclimaterating = UserInput.ClimateRating
+    JOIN UserInfo ON UserInput.UserID = UserInfo.UserID
+    JOIN Country ON UserInput.CountryID = Country.CountryID
+GROUP BY Country.Name
+ORDER BY COUNT DESC;
+-- @block
 CREATE INDEX ClimateRatingIndex ON UserInput(ClimateRating);
 CREATE INDEX UserIDIndex ON UserInput(UserID);
 -- @block
