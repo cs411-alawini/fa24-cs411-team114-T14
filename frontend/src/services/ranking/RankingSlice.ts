@@ -1,12 +1,19 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getRankingRequest } from "./RankingRequests";
+import {
+  getAverageClimateRatingOfCountry,
+  getRankingRequest,
+} from "./RankingRequests";
 import { RootState } from "../../app/store";
 import Ranking from "../../types/Ranking/Ranking";
+import AverageClimateRating from "../../types/Ranking/AverageClimateRating";
 
 interface RankingState {
   rankings: Ranking | null;
   isLoading: boolean;
   error: string;
+  averageClimateRatings: AverageClimateRating[];
+  isLoadingAverageClimateRatings: boolean;
+  errorAverageClimateRatings: string;
 }
 
 function getInitialRankingState(): RankingState {
@@ -14,6 +21,9 @@ function getInitialRankingState(): RankingState {
     rankings: null,
     isLoading: false,
     error: "",
+    averageClimateRatings: [],
+    isLoadingAverageClimateRatings: false,
+    errorAverageClimateRatings: "",
   };
 }
 
@@ -25,6 +35,28 @@ const fetchRankings = createAsyncThunk<Ranking, void, { state: RootState }>(
       return Promise.reject("User not logged in");
     }
     return await getRankingRequest(userInfo.token);
+  }
+);
+
+const fetchAverageClimateRatings = createAsyncThunk<
+  AverageClimateRating[],
+  { dateVisitedFrom: string; dateVisitedTo: string },
+  { state: RootState }
+>(
+  "ranking/fetchAverageClimateRatings",
+  async function get(
+    { dateVisitedFrom, dateVisitedTo },
+    { getState }
+  ): Promise<AverageClimateRating[]> {
+    const userInfo = getState().auth.userInfo;
+    if (userInfo === null) {
+      return Promise.reject("User not logged in");
+    }
+    return await getAverageClimateRatingOfCountry(
+      userInfo.token,
+      dateVisitedFrom,
+      dateVisitedTo
+    );
   }
 );
 
@@ -46,9 +78,22 @@ const rankingSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message || "";
       });
+    builder
+      .addCase(fetchAverageClimateRatings.pending, (state) => {
+        state.isLoadingAverageClimateRatings = true;
+        state.errorAverageClimateRatings = "";
+      })
+      .addCase(fetchAverageClimateRatings.fulfilled, (state, action) => {
+        state.isLoadingAverageClimateRatings = false;
+        state.averageClimateRatings = action.payload;
+      })
+      .addCase(fetchAverageClimateRatings.rejected, (state, action) => {
+        state.isLoadingAverageClimateRatings = false;
+        state.errorAverageClimateRatings = action.error.message || "";
+      });
   },
 });
 
 const rankingReducer = rankingSlice.reducer;
-export { fetchRankings };
+export { fetchRankings, fetchAverageClimateRatings };
 export default rankingReducer;
