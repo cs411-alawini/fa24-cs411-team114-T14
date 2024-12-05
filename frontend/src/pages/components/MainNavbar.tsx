@@ -5,6 +5,8 @@ import UserInfo from "../../types/auth/UserInfo";
 import { logout } from "../../services/auth/AuthSlice";
 import { Outlet } from "react-router";
 import { fetchUserInputs } from "../../services/userinput/UserInputSlice";
+import { fetchRankings } from "../../services/ranking/RankingSlice";
+import { fetchCitizenships } from "../../services/country/CountrySlice";
 
 interface MainNavbarProps {
   user: UserInfo;
@@ -15,7 +17,9 @@ function MainNavbar({ user, links }: MainNavbarProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    dispatch(fetchCitizenships());
     dispatch(fetchUserInputs());
+    dispatch(fetchRankings());
   }, [dispatch]);
 
   const handleLogoutClick = (event: React.MouseEvent<HTMLButtonElement>) => {
