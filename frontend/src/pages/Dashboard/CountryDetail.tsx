@@ -2,8 +2,18 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Container, Row, Col, Card, Spinner, Alert, ProgressBar } from "react-bootstrap";
-import { FaUtensils, FaHospital, FaCloud, FaPlane, FaShieldAlt, FaDollarSign, FaTheaterMasks, FaRoad, FaStethoscope } from "react-icons/fa";
+import { Container, Row, Col, Card, Spinner, Alert } from "react-bootstrap";
+import { 
+  FaUtensils, 
+  FaHospital, 
+  FaCloud, 
+  FaPlane, 
+  FaShieldAlt, 
+  FaDollarSign, 
+  FaTheaterMasks, 
+  FaRoad, 
+  FaStethoscope 
+} from "react-icons/fa";
 
 interface CountryData {
   Name: string;
@@ -110,6 +120,78 @@ function CountryDetail() {
     return `${value.toFixed(2)}%`;
   };
 
+  // Color Mapping Function
+  const getRatingColor = (value: number): string => {
+    if (value < 1) value = 1;
+    if (value > 10) value = 10;
+
+    let hue: number;
+
+    if (value <= 5) {
+      // From red (0°) to yellow (60°)
+      hue = ((value - 1) / 4) * 60; // Maps 1-5 to 0-60
+    } else {
+      // From yellow (60°) to green (120°)
+      hue = 60 + ((value - 6) / 4) * 60; // Maps 6-10 to 60-120
+    }
+
+    return `hsl(${hue}, 100%, 50%)`;
+  };
+
+  // Custom Progress Bar Component
+  const ProgressBarCustom: React.FC<{ value: number; label: string }> = ({ value, label }) => {
+    const color = getRatingColor(value);
+
+    return (
+      <div style={{ backgroundColor: '#e9ecef', borderRadius: '0.25rem', height: '1.5rem', marginTop: '0.5rem' }}>
+        <div
+          style={{
+            width: `${value * 10}%`,
+            backgroundColor: color,
+            height: '100%',
+            borderRadius: '0.25rem',
+            textAlign: 'center',
+            color: 'black',
+            fontWeight: 'bold',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {label}
+        </div>
+      </div>
+    );
+  };
+
+  // Function to render average rating with progress bar and icon
+  const renderAverageRating = (
+    label: string,
+    value: number | null,
+    icon: JSX.Element
+  ) => {
+    if (value === null || typeof value !== 'number') {
+      return (
+        <p className="mb-1 d-flex align-items-center">
+          <span className="me-2" style={{ fontSize: '1.5rem' }}>{icon}</span>
+          <strong>{label}:</strong> --
+        </p>
+      );
+    }
+
+    return (
+      <div className="mb-3 d-flex align-items-center">
+        <div className="me-2" style={{ fontSize: '1.5rem' }}>
+          {icon}
+        </div>
+        <div className="flex-grow-1">
+          <strong>{label}:</strong>
+          <ProgressBarCustom value={value} label={`${value}/10`} />
+        </div>
+      </div>
+    );
+  };
+
   if (error) {
     return (
       <Container className="mt-4">
@@ -133,39 +215,6 @@ function CountryDetail() {
 
   const { country, climate, economy, average_ratings } = data;
   console.log("Average Ratings:", average_ratings); // Debugging
-
-  // Function to render average rating with progress bar and icon
-  const renderAverageRating = (
-    label: string,
-    value: number | null,
-    icon: JSX.Element
-  ) => {
-    if (value === null || typeof value !== 'number') {
-      return (
-        <p className="mb-1 d-flex align-items-center">
-          <span className="me-2">{icon}</span>
-          <strong>{label}:</strong> --
-        </p>
-      );
-    }
-
-    return (
-      <div className="mb-3 d-flex align-items-center">
-        <div className="me-2">
-          {icon}
-        </div>
-        <div className="flex-grow-1">
-          <strong>{label}:</strong>
-          <ProgressBar
-            now={value * 10} // Assuming ratings are out of 10
-            label={`${value}/10`}
-            variant={value >= 8 ? "success" : value >= 5 ? "warning" : "danger"}
-            className="mt-1"
-          />
-        </div>
-      </div>
-    );
-  };
 
   return (
     <Container className="mt-4 mb-4">
