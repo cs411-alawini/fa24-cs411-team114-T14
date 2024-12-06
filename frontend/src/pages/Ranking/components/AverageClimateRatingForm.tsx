@@ -2,8 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useAppDispatch } from "../../app/hooks";
-import { fetchAverageClimateRatings } from "../../services/ranking/RankingSlice";
+import { useAppDispatch } from "../../../app/hooks";
+import { fetchAverageClimateRatings } from "../../../services/ranking/RankingSlice";
 
 const AverageClimateRatingFormSchema = z
   .object({

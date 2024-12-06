@@ -6,9 +6,8 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import MainNavbar from "./pages/components/MainNavbar";
 import Feedback from "./pages/Feedback/Feedback";
 import EditUserInputForm from "./pages/Feedback/components/EditUserInputForm";
-import Ranking from "./Ranking/Ranking";
+import Ranking from "./pages/Ranking/Ranking";
 import CountryDetail from "./pages/Dashboard/CountryDetail";
-
 
 const login = "/login";
 const dashboard = "/dashboard";
