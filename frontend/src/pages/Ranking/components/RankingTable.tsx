@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
-import { selectCitizenships } from "../../services/country/CountrySelectors";
-import { selectRanking } from "../../services/ranking/RankingSelectors";
 import { useMemo } from "react";
 import { Alert, Container, Table } from "react-bootstrap";
+import { selectCitizenships } from "../../../services/country/CountrySelectors";
+import { selectRanking } from "../../../services/ranking/RankingSelectors";
 
 function RankingTable() {
   const citizenships = useSelector(selectCitizenships);

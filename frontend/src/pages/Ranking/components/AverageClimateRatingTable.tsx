@@ -1,6 +1,6 @@
 import { Alert, Table } from "react-bootstrap";
-import { useAppSelector } from "../../app/hooks";
-import { selectAverageClimateRatings } from "../../services/ranking/RankingSelectors";
+import { selectAverageClimateRatings } from "../../../services/ranking/RankingSelectors";
+import { useAppSelector } from "../../../app/hooks";
 
 function AverageClimateRatingTable() {
   const averageClimateRatings = useAppSelector(selectAverageClimateRatings);
