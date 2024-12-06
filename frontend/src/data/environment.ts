@@ -6,7 +6,8 @@ const apiEndpoints = {
   userInputs: `${base_url}/user_input`,
   ranking: `${base_url}/ranking`,
   averageClimateRatingOfCountry: `${base_url}/average_climate_rating_of_country`,
-  countryDetails: (name: string) => `${base_url}/country/${name}`,
+  countryDetails: (name: string) =>
+    `${base_url}/country/${encodeURIComponent(name || "")}`,
 };
 
 export default apiEndpoints;
