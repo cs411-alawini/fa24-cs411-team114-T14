@@ -11,7 +11,7 @@ python -m venv python_env
 
 To activate python environment:
 ```
-source python_env/bin/activate
+python -m venv python_env
 ```
 
 To install python packages:
