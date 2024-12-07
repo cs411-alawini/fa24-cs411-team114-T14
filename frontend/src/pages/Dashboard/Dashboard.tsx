@@ -24,8 +24,8 @@ function Dashboard() {
       <LocationSearch />
       <div style={{ height: "auto", maxHeight: "93vh", padding: "10px" }}>
         <ComposableMap
-          projectionConfig={{ scale: 150 }}
-          height={385}
+          projectionConfig={{ scale: 120 }}
+          height={325}
           width={800}
         >
           <Graticule stroke="#F53" />
