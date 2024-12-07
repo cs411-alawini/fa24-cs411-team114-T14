@@ -8,6 +8,8 @@ const apiEndpoints = {
   averageClimateRatingOfCountry: `${base_url}/average_climate_rating_of_country`,
   countryDetails: (name: string) =>
     `${base_url}/country/${encodeURIComponent(name || "")}`,
+  searchLocation: (searchTerm: string) =>
+    `${base_url}/search_location/${encodeURIComponent(searchTerm || "")}`,
 };
 
 export default apiEndpoints;
