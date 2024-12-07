@@ -5,7 +5,11 @@ const formatPercentage = (
   if (typeof value !== "number") {
     return defaultValue;
   }
-  return `${value.toFixed(2)}%`;
+  try {
+    return `${value.toFixed(2)}%`;
+  } catch {
+    return defaultValue;
+  }
 };
 
 export default formatPercentage;
