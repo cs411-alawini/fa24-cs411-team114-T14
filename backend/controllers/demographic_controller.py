@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify
+from flask_jwt_extended import jwt_required
 from sqlalchemy import text
 from extensions import db
 
@@ -10,6 +11,7 @@ def process_rating(rating):
 
 
 @country_details_blueprint.route("/country/<string:name>", methods=["GET"])
+@jwt_required()
 def get_country_details(name: str):
     country = db.session.execute(
         text(
