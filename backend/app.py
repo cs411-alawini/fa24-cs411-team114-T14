@@ -8,7 +8,7 @@ from controllers.auth_controller import auth_blueprint
 from controllers.country_controller import country_blueprint
 from controllers.user_input_controller import user_input_blueprint
 from controllers.ranking_controller import ranking_blueprint
-from controllers.demographic_contoller import country_details_blueprint
+from controllers.demographic_controller import country_details_blueprint
 
 USER = "secondary"
 PASSWORD = os.environ.get("DB_PASSWORD")
