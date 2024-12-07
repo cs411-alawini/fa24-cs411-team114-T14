@@ -26,22 +26,35 @@ import {
   fetchCountryDetails,
   resetCountryDetail,
 } from "../../services/demographics/DemographicsSlice";
+import mapCountryToDatabase from "../../data/map_country_to_database";
 
 function CountryDetail() {
   const { name } = useParams<{ name: string }>();
+  const validName =
+    name && mapCountryToDatabase.has(name)
+      ? mapCountryToDatabase.get(name) ?? name
+      : name;
   const data = useAppSelector(selectCountryDetails);
   const isLoading = useAppSelector(selectCountryDetailsIsLoading);
   const error = useAppSelector(selectCountryDetailsError);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (name) {
-      dispatch(fetchCountryDetails(name));
+    if (validName) {
+      dispatch(fetchCountryDetails(validName));
     }
     return () => {
       dispatch(resetCountryDetail());
     };
-  }, [dispatch, name]);
+  }, [dispatch, validName]);
+
+  if (validName === "") {
+    return (
+      <Container className="mt-4">
+        <Alert variant="danger">This country is not supported</Alert>
+      </Container>
+    );
+  }
 
   if (error) {
     return (

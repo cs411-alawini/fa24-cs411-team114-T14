@@ -15,6 +15,7 @@ const dashboardFeedback = "/dashboard/feedback";
 const dashboardFeedbackEdit = "/dashboard/feedback/edit";
 const dashboardRankings = "/dashboard/rankings";
 const dashboardHome = "/dashboard/home";
+const dashboardCountryDetail = "/dashboard/country";
 const all = "*";
 
 const links = [
@@ -55,11 +56,15 @@ function AppRouter() {
         >
           <Route path={dashboardHome} element={<Dashboard />} />
           <Route path={dashboardFeedback} element={<Feedback />} />
-          <Route path={`${dashboardFeedbackEdit}/:id`} element={<EditUserInputForm />} />
+          <Route
+            path={`${dashboardFeedbackEdit}/:id`}
+            element={<EditUserInputForm />}
+          />
           <Route path={dashboardRankings} element={<Ranking />} />
-
-          {/* Add the new route for Country Detail: */}
-          <Route path="country/:name" element={<CountryDetail />} />
+          <Route
+            path={`${dashboardCountryDetail}/:name`}
+            element={<CountryDetail />}
+          />
         </Route>
         <Route path={all} element={<Navigate to={login} />} />
       </Routes>
@@ -73,6 +78,7 @@ export {
   dashboardFeedback,
   dashboardFeedbackEdit,
   dashboardHome,
+  dashboardCountryDetail,
   all,
 };
 export default AppRouter;

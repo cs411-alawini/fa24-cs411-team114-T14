@@ -7,6 +7,7 @@ import {
   fetchSearchResults,
 } from "../../../services/searchLocation/SearchLocationSlice";
 import { useNavigate } from "react-router";
+import { dashboardCountryDetail } from "../../../routes";
 
 const SearchLocation = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -56,7 +57,9 @@ const SearchLocation = () => {
                 key={index}
                 onClick={() => {
                   navigate(
-                    `/dashboard/country/${encodeURIComponent(item.countryName)}`
+                    `${dashboardCountryDetail}/${encodeURIComponent(
+                      item.countryName
+                    )}`
                   );
                 }}
               >

@@ -8,6 +8,7 @@ import { Tooltip } from "react-tooltip";
 import { useNavigate } from "react-router-dom";
 import "react-tooltip/dist/react-tooltip.css";
 import LocationSearch from "./components/LocationSearch";
+import { dashboardCountryDetail } from "../../routes";
 
 const geoUrl = "https://unpkg.com/world-atlas@2.0.2/countries-110m.json";
 
@@ -15,8 +16,7 @@ function Dashboard() {
   const navigate = useNavigate();
 
   const handleCountryClick = (countryName: string) => {
-    // Encode the country name if it contains spaces or special characters
-    navigate(`/dashboard/country/${encodeURIComponent(countryName)}`);
+    navigate(`${dashboardCountryDetail}/${encodeURIComponent(countryName)}`);
   };
 
   return (
