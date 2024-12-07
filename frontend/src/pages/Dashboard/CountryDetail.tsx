@@ -129,7 +129,8 @@ function CountryDetail() {
                     <strong>
                       CO<sub>2</sub> Emissions:
                     </strong>{" "}
-                    {formatLargeNumber(climate.CO2Emissions)} metric tons
+                    {formatLargeNumber(Number.parseInt(climate.CO2Emissions))}{" "}
+                    metric tons
                   </p>
                 </Col>
               </Row>
@@ -150,7 +151,10 @@ function CountryDetail() {
                 <Col md={4}>
                   <p className="mb-1">
                     <strong>GDP:</strong>{" "}
-                    {formatCurrency(economy.GDP, economy.CurrencyCode)}
+                    {formatCurrency(
+                      Number.parseInt(economy.GDP),
+                      economy.CurrencyCode
+                    )}
                   </p>
                   <p className="mb-1">
                     <strong>CPI:</strong> {economy.CPI}
@@ -162,13 +166,19 @@ function CountryDetail() {
                   </p>
                   <p className="mb-1">
                     <strong>Minimum Wage:</strong>{" "}
-                    {formatCurrency(economy.MinimumWage, economy.CurrencyCode)}
+                    {formatCurrency(
+                      Number.parseInt(economy.MinimumWage),
+                      economy.CurrencyCode
+                    )}
                   </p>
                 </Col>
                 <Col md={4}>
                   <p className="mb-1">
                     <strong>Unemployment Rate:</strong>{" "}
-                    {formatPercentage(economy.UnemploymentRate, "0%")}
+                    {formatPercentage(
+                      Number.parseInt(economy.UnemploymentRate),
+                      "0%"
+                    )}
                   </p>
                   {/* Add other economy fields as needed */}
                 </Col>

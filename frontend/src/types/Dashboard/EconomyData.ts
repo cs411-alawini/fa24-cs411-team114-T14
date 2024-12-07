@@ -1,9 +1,9 @@
 interface EconomyData {
-  GDP: number;
-  CPI: number;
+  GDP: string;
+  CPI: string;
   CurrencyCode: string;
-  MinimumWage: number;
-  UnemploymentRate: number;
+  MinimumWage: string;
+  UnemploymentRate: string;
 }
 
 export default EconomyData;
