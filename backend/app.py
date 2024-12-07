@@ -9,6 +9,7 @@ from controllers.country_controller import country_blueprint
 from controllers.user_input_controller import user_input_blueprint
 from controllers.ranking_controller import ranking_blueprint
 from controllers.demographic_controller import country_details_blueprint
+from controllers.search_location_controller import search_location_blueprint
 
 USER = "secondary"
 PASSWORD = os.environ.get("DB_PASSWORD")
@@ -46,5 +47,6 @@ def create_app():
     app.register_blueprint(user_input_blueprint)
     app.register_blueprint(ranking_blueprint)
     app.register_blueprint(country_details_blueprint)
+    app.register_blueprint(search_location_blueprint)
     db.init_app(app)
     return app

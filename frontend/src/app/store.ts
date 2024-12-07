@@ -4,6 +4,7 @@ import countryReducer from "../services/country/CountrySlice";
 import userInputReducer from "../services/userinput/UserInputSlice";
 import rankingReducer from "../services/ranking/RankingSlice";
 import demographicsReducer from "../services/demographics/DemographicsSlice";
+import searchLocationReducer from "../services/searchLocation/SearchLocationSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     userinputs: userInputReducer,
     ranking: rankingReducer,
     demographics: demographicsReducer,
+    searchLocation: searchLocationReducer,
   },
 });
 
