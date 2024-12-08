@@ -114,8 +114,8 @@ def get_average_climate_rating_of_country():
                     FROM UserInput
                         JOIN Country ON UserInput.CountryID = Country.CountryID
                         JOIN UserInfo ON UserInput.UserID = UserInfo.UserID
-                    WHERE DateVisitedFrom > '1900-01-01'
-                        AND DateVisitedTo < '2100-01-01'
+                    WHERE DateVisitedFrom > :date_visited_from
+                        AND DateVisitedTo < :date_visited_to
                     GROUP BY country
                     ORDER BY average_climate_rating DESC"""
             ),
