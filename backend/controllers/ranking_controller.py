@@ -22,6 +22,11 @@ class AverageClimateRatingOfCountry(NamedTuple):
     average_climate_rating: float
 
 
+class TextRanking(NamedTuple):
+    CountryName: str
+    Label: str
+
+
 @ranking_blueprint.route("/ranking", methods=["GET"])
 @jwt_required()
 def get_ranking():
@@ -114,8 +119,8 @@ def get_average_climate_rating_of_country():
                     FROM UserInput
                         JOIN Country ON UserInput.CountryID = Country.CountryID
                         JOIN UserInfo ON UserInput.UserID = UserInfo.UserID
-                    WHERE DateVisitedFrom > '1900-01-01'
-                        AND DateVisitedTo < '2100-01-01'
+                    WHERE DateVisitedFrom > :date_visited_from
+                        AND DateVisitedTo < :date_visited_to
                     GROUP BY country
                     ORDER BY average_climate_rating DESC"""
             ),
@@ -125,8 +130,21 @@ def get_average_climate_rating_of_country():
             },
         ).fetchall()
     )  # type: ignore
+    text_rankings: list[TextRanking] = db.session.execute(
+        text(
+            """ CALL CalculateCountriesWithWorstClimateImpact(
+                :startDate, :endDate
+            )"""
+        ),
+        {"startDate": date_visited_from, "endDate": date_visited_to},
+    ).fetchall()  # type: ignore
+    text_ranking_map = {row.CountryName: row.Label for row in text_rankings}
     response_data = [
-        {"country": row.country, "averageClimateRating": row.average_climate_rating}
+        {
+            "country": row.country,
+            "averageClimateRating": row.average_climate_rating,
+            "label": text_ranking_map.get(row.country, ""),
+        }
         for row in average_climate_rating_of_country
     ]
     return jsonify(response_data), 200

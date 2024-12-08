@@ -25,6 +25,7 @@ function AverageClimateRatingTable() {
         <tr>
           <th>Country</th>
           <th>Average Climate Rating</th>
+          <th>Climate impact</th>
         </tr>
       </thead>
       <tbody>
@@ -32,6 +33,7 @@ function AverageClimateRatingTable() {
           <tr key={averageClimateRating.country}>
             <td>{averageClimateRating.country}</td>
             <td>{averageClimateRating.averageClimateRating}</td>
+            <td>{averageClimateRating.label}</td>
           </tr>
         ))}
       </tbody>
