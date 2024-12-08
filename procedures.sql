@@ -19,12 +19,23 @@ BEGIN
                         ) AS ClimateRank
                     FROM (
                             SELECT Country.Name AS CountryName,
-                                AVG(ClimateRating) AS AvgClimateRating
-                            FROM UserInput
-                                JOIN Country ON UserInput.CountryID = Country.CountryID
-                            WHERE DateVisitedFrom >= startDate
-                                AND DateVisitedTo <= endDate
-                            GROUP BY Country.Name
+                                SUM(
+                                    CASE
+                                    WHEN UserInfo.isFrequent = TRUE THEN ClimateRating * 2
+                                    ELSE ClimateRating
+                                    END
+                                ) / SUM(
+                                    CASE
+                                    WHEN UserInfo.isFrequent = TRUE THEN 2
+                                    ELSE 1
+                                    END
+                                ) AS AvgClimateRating
+                            FROM Country
+                                LEFT JOIN UserInput ON UserInput.CountryID = Country.CountryID
+                                LEFT JOIN UserInfo ON UserInput.UserID = UserInfo.UserID
+                            WHERE DateVisitedFrom > startDate
+                            AND DateVisitedTo < endDate
+                            GROUP BY CountryName
                         ) AvgClimateRatings
                     UNION
                     SELECT CountryName,
