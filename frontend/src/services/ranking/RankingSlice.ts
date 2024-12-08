@@ -80,6 +80,7 @@ const rankingSlice = createSlice({
       });
     builder
       .addCase(fetchAverageClimateRatings.pending, (state) => {
+        state.averageClimateRatings = null;
         state.isLoadingAverageClimateRatings = true;
         state.errorAverageClimateRatings = "";
       })
