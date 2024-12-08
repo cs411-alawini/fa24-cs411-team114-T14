@@ -17,6 +17,11 @@ class FavoriteClimateCountryCount(NamedTuple):
     favorite_count: int
 
 
+class AverageClimateRatingOfCountry(NamedTuple):
+    country: str
+    average_climate_rating: float
+
+
 @ranking_blueprint.route("/ranking", methods=["GET"])
 @jwt_required()
 def get_ranking():
@@ -87,23 +92,39 @@ def get_ranking():
 
 
 @ranking_blueprint.route("/average_climate_rating_of_country", methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def get_average_climate_rating_of_country():
     date_visited_from = request.args.get("date_visited_from")
     date_visited_to = request.args.get("date_visited_to")
-    average_climate_rating_of_country = db.session.execute(
-        text(
-            """ SELECT Country.Name AS country,
-                    AVG(ClimateRating) AS average_climate_rating
-                FROM UserInput
-                    JOIN Country ON UserInput.CountryID = Country.CountryID
-                WHERE DateVisitedFrom > :date_visited_from
-                    AND DateVisitedTo < :date_visited_to
-                GROUP BY country
-                ORDER BY average_climate_rating DESC"""
-        ),
-        {"date_visited_from": date_visited_from, "date_visited_to": date_visited_to},
-    )
+    average_climate_rating_of_country: list[AverageClimateRatingOfCountry] = (
+        db.session.execute(
+            text(
+                """ SELECT Country.Name AS country,
+                        SUM(
+                            CASE
+                            WHEN UserInfo.isFrequent = TRUE THEN ClimateRating * 2
+                            ELSE ClimateRating
+                            END
+                        ) / SUM(
+                            CASE
+                            WHEN UserInfo.isFrequent = TRUE THEN 2
+                            ELSE 1
+                            END
+                        ) AS average_climate_rating
+                    FROM UserInput
+                        JOIN Country ON UserInput.CountryID = Country.CountryID
+                        JOIN UserInfo ON UserInput.UserID = UserInfo.UserID
+                    WHERE DateVisitedFrom > '1900-01-01'
+                        AND DateVisitedTo < '2100-01-01'
+                    GROUP BY country
+                    ORDER BY average_climate_rating DESC"""
+            ),
+            {
+                "date_visited_from": date_visited_from,
+                "date_visited_to": date_visited_to,
+            },
+        ).fetchall()
+    )  # type: ignore
     response_data = [
         {"country": row.country, "averageClimateRating": row.average_climate_rating}
         for row in average_climate_rating_of_country
