@@ -31,7 +31,7 @@ function MainNavbar({ user, links }: MainNavbarProps): JSX.Element {
     <>
       <Navbar bg="light" variant="light">
         <Container>
-          <Navbar.Brand>CS411 Project</Navbar.Brand>
+          <Navbar.Brand>Country data tracker</Navbar.Brand>
           <Nav className="me-auto">
             {links.map((link) => (
               <Nav.Link key={link.path} href={link.path}>

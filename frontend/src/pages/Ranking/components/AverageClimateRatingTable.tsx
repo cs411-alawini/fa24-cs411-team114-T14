@@ -1,9 +1,17 @@
 import { Alert, Table } from "react-bootstrap";
-import { selectAverageClimateRatings } from "../../../services/ranking/RankingSelectors";
+import {
+  selectAverageClimateRatings,
+  selectIsLoadingAverageClimateRatings,
+} from "../../../services/ranking/RankingSelectors";
 import { useAppSelector } from "../../../app/hooks";
 
 function AverageClimateRatingTable() {
   const averageClimateRatings = useAppSelector(selectAverageClimateRatings);
+  const isLoading = useAppSelector(selectIsLoadingAverageClimateRatings);
+
+  if (isLoading) {
+    return <Alert variant="info">Loading...</Alert>;
+  }
 
   if (averageClimateRatings === null) {
     return (
