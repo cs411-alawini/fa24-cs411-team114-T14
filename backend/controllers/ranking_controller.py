@@ -92,7 +92,7 @@ def get_ranking():
 
 
 @ranking_blueprint.route("/average_climate_rating_of_country", methods=["GET"])
-# @jwt_required()
+@jwt_required()
 def get_average_climate_rating_of_country():
     date_visited_from = request.args.get("date_visited_from")
     date_visited_to = request.args.get("date_visited_to")
