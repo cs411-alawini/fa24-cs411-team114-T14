@@ -35,6 +35,31 @@ def is_subsequence(search_term: str, text: str) -> int:
     "/search_location/<string:search_term>", methods=["GET"]
 )
 def search_location(search_term: str):
+    exact_matches: list[SearchInformation] = db.session.execute(
+        text(
+            """ SELECT 
+                    Name AS country_name,
+                    Abbreviation AS abbreviation,
+                    CapitalCity AS capital_city,
+                    LargestCity AS largest_city
+                FROM Country
+                WHERE MATCH(Name, Abbreviation, CapitalCity, LargestCity) AGAINST(:search_term IN NATURAL LANGUAGE MODE)
+                LIMIT 10
+            """
+        ),
+        {"search_term": search_term},
+    ).fetchall()  # type: ignore
+    if exact_matches:
+        results = [
+            {
+                "countryName": exact_match.country_name,
+                "abbreviation": exact_match.abbreviation,
+                "capitalCity": exact_match.capital_city,
+                "largestCity": exact_match.largest_city,
+            }
+            for exact_match in exact_matches
+        ]
+        return jsonify(results), 200
     location_details: list[SearchInformation] = db.session.execute(
         text(
             """ SELECT 
