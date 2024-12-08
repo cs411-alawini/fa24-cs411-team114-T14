@@ -18,7 +18,7 @@ function Login(): JSX.Element {
     >
       <Card>
         <Card.Body>
-          <h2 className="h2 mb-4">CS411 Project</h2>
+          <h2 className="h2 mb-4">Country data tracker</h2>
           <h4 className="h4 mb-4">Login into your application account</h4>
           <LoginTabs />
         </Card.Body>
