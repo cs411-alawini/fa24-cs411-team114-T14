@@ -63,7 +63,7 @@ def login():
     ).fetchone()
     if not country:
         return {"message": "Invalid country of citizenship"}, 400
-    access_token = create_access_token(identity=str(user.UserID))
+    access_token = create_access_token(identity=str(user.UserID), expires_delta=False)
     return (
         jsonify(
             {
